@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=pipeline
-#SBATCH --output=pipeline.log
+#SBATCH --job-name=build_pipe
+#SBATCH --output=build_pipe.log
 #SBATCH --time=23:59:59
-#SBATCH --mem=11GB
+#SBATCH --mem=16GB
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --partition=gpu
@@ -15,12 +15,17 @@ module load CUDA/10.2.89-GCC-8.3.0
 module load Anaconda3/5.0.1
 source /opt/apps/software/Anaconda3/5.0.1/etc/profile.d/conda.sh
 export TORCH_CUDA_ARCH_LIST="6.1;7.0"
-source env/bin/activate
+export SINGULARITY_CACHEDIR=/lscratch/$USER
+export SINGULARITY_TMPDIR=/lscratch/$USER
+mkdir $SINGULARITY_TMPDIR
+
 
 nvidia-smi
 nvcc --version
 
-singularity run --fakeroot --writable pipeline.simg
+singularity build --sandbox pipeline/ docker://fialaon/pipeline
+
+rm -r $SINGULARITY_TMPDIR/*
 
 echo finished
 
