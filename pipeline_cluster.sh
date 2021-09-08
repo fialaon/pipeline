@@ -3,8 +3,8 @@
 #SBATCH --output=build_pipe.log
 #SBATCH --time=23:59:59
 #SBATCH --mem=16GB
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
+#SBATCH --gres=gpu:4
+#SBATCH --cpus-per-task=2
 #SBATCH --partition=gpu
 #SBATCH --exclude=node-12,dgx-2,dgx-3,dgx-4,dgx-5
 
